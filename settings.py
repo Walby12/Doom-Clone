@@ -1,0 +1,20 @@
+import math
+
+TILE_SIZE = 32
+
+ROWS = 10
+COLS = 16
+
+WINDOW_W = COLS * TILE_SIZE
+WINDOW_H = ROWS * TILE_SIZE
+
+FOV = 60 * (math.pi / 180)
+
+RES = 4
+NUM_RAYS =  WINDOW_W // RES
+
+FPS = 60
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
