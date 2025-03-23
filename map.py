@@ -16,11 +16,18 @@ class Map:
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         ]
 
+    # checks if there is a wall at a certain coordinate (in pixels)
+    def has_wall_at(self, x, y):
+        return self.grid[int(y // TILESIZE)][int(x // TILESIZE)]
+    
     def render(self, screen):
         for i in range(len(self.grid)):
             for j in range(len(self.grid[0])):
-                tile_x = j * TILE_SIZE
-                tile_y = i * TILE_SIZE
+                # pixel coordinates
+                tile_x = j * TILESIZE
+                tile_y = i * TILESIZE
 
-                color = WHITE if self.grid[i][j] == 0 else BLACK
-                pygame.draw.rect(screen, color, (tile_x, tile_y, TILE_SIZE - 1, TILE_SIZE - 1))
+                if self.grid[i][j] == 0:
+                    pygame.draw.rect(screen, (255, 255, 255), (tile_x, tile_y, TILESIZE - 1, TILESIZE - 1))
+                elif self.grid[i][j] == 1:
+                    pygame.draw.rect(screen, (40, 40, 40), (tile_x, tile_y, TILESIZE - 1, TILESIZE - 1))

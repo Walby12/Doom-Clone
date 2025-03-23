@@ -1,48 +1,45 @@
 import pygame
-import math
 from settings import *
 
 class Player:
     def __init__(self):
-        self.x = WINDOW_W // 2
-        self.y = WINDOW_H // 2
-        self.radius = 5
-        self.turn_direction = 0
-        self.walk_direction = 0
-        self.rotation_angle = 0
-        self.move_speed = 2.5
-        self.rotation_speed = 2 * (math.pi / 180)
-
+        self.x = WINDOW_WIDTH / 2
+        self.y = WINDOW_HEIGHT / 2
+        self.radius = 3
+        self.turnDirection = 0
+        self.walkDirection = 0
+        self.rotationAngle = 0
+        self.moveSpeed = 2.5
+        self.rotationSpeed = 2 * (math.pi / 180)
+    
     def update(self):
+
         keys = pygame.key.get_pressed()
 
-        # Rotation
-        if keys[pygame.K_d]:
-            self.turn_direction = 1
-        elif keys[pygame.K_a]:
-            self.turn_direction = -1
-        else:
-            self.turn_direction = 0
+        self.turnDirection = 0
+        self.moveDirection = 0
 
-        # Movement
-        if keys[pygame.K_w]:
-            self.walk_direction = 1
-        elif keys[pygame.K_s]:
-            self.walk_direction = -1
-        else:
-            self.walk_direction = 0
+        if keys[pygame.K_RIGHT]:
+            self.turnDirection = 1
+        if keys[pygame.K_LEFT]:
+            self.turnDirection = -1
+        if keys[pygame.K_UP]:
+            self.moveDirection = 1
+        if keys[pygame.K_DOWN]:
+            self.moveDirection = -1
 
-        self.rotation_angle += self.turn_direction * self.rotation_speed
+        self.rotationAngle += self.turnDirection * self.rotationSpeed
 
-        move_step = self.walk_direction * self.move_speed
-        self.x= self.x + math.cos(self.rotation_angle) * move_step
-        self.y = self.y + math.sin(self.rotation_angle) * move_step
+        moveStep = self.moveDirection * self.moveSpeed
+        self.x += math.cos(self.rotationAngle) * moveStep
+        self.y += math.sin(self.rotationAngle) * moveStep
 
-
+        if self.rotationAngle < 0:
+            self.rotationAngle += 2 * math.pi
+        if self.rotationAngle > 2 * math.pi:
+            self.rotationAngle -= 2 * math.pi
+    
     def render(self, screen):
-        pygame.draw.circle(screen, RED, (self.x, self.y), self.radius)
+        pygame.draw.circle(screen, (255, 0, 0), (self.x, self.y), self.radius)
 
-        # Draw line to indicate direction
-        line_x = self.x + int(math.cos(self.rotation_angle) * 50)
-        line_y = self.y + int(math.sin(self.rotation_angle) * 50)
-        pygame.draw.line(screen, RED, (self.x, self.y), (line_x, line_y), 2)
+        pygame.draw.line(screen, (255, 0, 0), (self.x, self.y), (self.x + math.cos(self.rotationAngle) * 50, self.y + math.sin(self.rotationAngle) * 50))
