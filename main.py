@@ -1,37 +1,33 @@
 import pygame
-from settings import *
-from map import Map
+import settings
+from map import *
 from player import *
 from ray_caster import *
 
-def start_new_ray_caster(window_h, window_w, title):
-    pygame.init()
-    screen = pygame.display.set_mode((window_h, window_w))
-    pygame.display.set_caption(title)
-    clock = pygame.time.Clock()
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-    game_map = Map()
-    player = Player()
-    ray_caster = Raycaster(player)
+map = Map()
+player = Player()
+raycaster = Raycaster(player, map)
 
-    running = True
-    while running:
-        screen.fill(BLACK)
+background_image = pygame.image.load("background.png")
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+clock = pygame.time.Clock()
 
-        player.update()
+while True:
+    clock.tick(60)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+    
+    player.update()
+    raycaster.castAllRays()
 
-        game_map.render(screen)
-        player.render(screen)
-        ray_caster.cast_all_rays()
-        ray_caster.render(screen)
+    screen.blit(background_image, (0, 0, 10, 10))
 
-        pygame.display.flip()
-        clock.tick(FPS)
-
-    pygame.quit()
-
-start_new_ray_caster(WINDOW_W, WINDOW_H, "Ray Caster engine")
+    # map.render(screen)
+    # player.render(screen)
+    raycaster.render(screen)
+    
+    pygame.display.update()
